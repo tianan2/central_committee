@@ -1,0 +1,23 @@
+---
+title: "Untitled"
+author: "Jaehwan Lim"
+date: "February 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC.xls") %>% select(-id) %>% rename(purgede = pursede, march = lmarch)
+
+```
+
+```{r}
+
+```
+
