@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "February 6, 2019"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -28,14 +28,17 @@ party_cc_tidied <- party_cc %>%
 party_cc_tidied %>% filter(value %in% c(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)) %>% 
   count(value) %>% 
   ggplot(aes(value, n)) +
-  geom_point() +
-  geom_line() + 
+  geom_line(size = 0.8) + 
+  geom_line(data = alternate, aes(value, n), linetype = "dashed") +
   expand_limits(y = 0) +
   scale_x_continuous(breaks = seq(8, 18, 1), 
                      labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) + 
-  labs(title = "Number of CC full members", 
+  labs(title = "Number of CC full and alternate members", 
        x = "Party congress", 
        y = "")
+
+## what about alternate members?
+alternate <- party_cc_tidied %>% filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1, 16.1, 17.1, 18.1)) %>% count(value)
 
 
 ## subsetting by national congress
@@ -43,10 +46,75 @@ party_cc_8 <- party_cc_tidied %>% filter(value %in% c(8.0, 8.1))
 party_cc_9 <- party_cc_tidied %>% filter(value %in% c(9.0, 9.1))
 party_cc_10 <- party_cc_tidied %>% filter(value %in% c(10.0, 10.1))
 party_cc_11 <- party_cc_tidied %>% filter(value %in% c(11.0, 11.1))
+party_cc_12 <- party_cc_tidied %>% filter(value %in% c(12.0, 12.1))
+party_cc_13 <- party_cc_tidied %>% filter(value %in% c(13.0, 13.1))
+party_cc_14 <- party_cc_tidied %>% filter(value %in% c(14.0, 14.1))
+party_cc_15 <- party_cc_tidied %>% filter(value %in% c(15.0, 15.1))
+party_cc_16 <- party_cc_tidied %>% filter(value %in% c(16.0, 16.1))
+party_cc_17 <- party_cc_tidied %>% filter(value %in% c(17.0, 17.1))
+party_cc_18 <- party_cc_tidied %>% filter(value %in% c(18.0, 18.1))
 
 party_cc_9new <- party_cc_9 %>% anti_join(party_cc_8, by = "name")
 party_cc_10new <- party_cc_10 %>% anti_join(party_cc_9, by = "name")
 party_cc_11new <- party_cc_11 %>% anti_join(party_cc_10, by = "name")
-  
+party_cc_12new <- party_cc_12 %>% anti_join(party_cc_11, by = "name")
+party_cc_13new <- party_cc_13 %>% anti_join(party_cc_12, by = "name")
+party_cc_14new <- party_cc_14 %>% anti_join(party_cc_13, by = "name")
+party_cc_15new <- party_cc_15 %>% anti_join(party_cc_14, by = "name")
+party_cc_16new <- party_cc_16 %>% anti_join(party_cc_15, by = "name")
+party_cc_17new <- party_cc_17 %>% anti_join(party_cc_16, by = "name")
+party_cc_18new <- party_cc_18 %>% anti_join(party_cc_17, by = "name")
+
+```
+
+## On average, how many steps a cadre should go through before one becomes a member of CC?
+```{r}
+all_9new <- party_cc_tidied %>% semi_join(party_cc_9new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 9, value, 9))
+
+all_10new <- party_cc_tidied %>% semi_join(party_cc_10new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 10, value, 10))
+
+all_11new <- party_cc_tidied %>% semi_join(party_cc_11new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 11, value, 11))
+
+
+
+all_12new <- party_cc_tidied %>% semi_join(party_cc_12new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 12, value, 12))
+
+all_13new <- party_cc_tidied %>% semi_join(party_cc_13new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 13, value, 13))
+
+all_14new <- party_cc_tidied %>% semi_join(party_cc_14new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 14, value, 14))
+
+all_15new <- party_cc_tidied %>% semi_join(party_cc_15new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 15, value, 15))
+
+all_16new <- party_cc_tidied %>% semi_join(party_cc_16new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 16, value, 16))
+
+all_17new <- party_cc_tidied %>% semi_join(party_cc_17new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 17, value, 17))
+
+all_18new <- party_cc_tidied %>% semi_join(party_cc_18new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 18, value, 18))
+
+## binding all congresses and creating a dataset
+all_newcomers <- bind_rows(all_9new, all_10new, all_11new, all_12new, all_13new, all_14new, all_15new, all_16new, all_17new, all_18new)
+
+
+
 ```
 
