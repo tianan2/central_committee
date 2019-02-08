@@ -3,6 +3,8 @@ title: "Untitled"
 author: "Jaehwan Lim"
 date: "February 6, 2019"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -15,11 +17,31 @@ library(readxl)
 
 party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC.xls") %>% select(-id) %>% rename(purgede = pursede, march = lmarch)
 
+theme_set(theme_light())
 ```
 
 ```{r}
-party_cc %>% 
-  gather(job, value, starts_with("job")) %>% 
-  View()
+## tidying the data 
+party_cc_tidied <- party_cc %>% 
+  gather(job, value, starts_with("job")) 
+
+party_cc_tidied %>% filter(value %in% c(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)) %>% 
+  count(value) %>% 
+  ggplot(aes(value, n)) +
+  geom_point() +
+  geom_line() + 
+  expand_limits(y = 0) 
+
+
+## subsetting by national congress
+party_cc_8 <- party_cc_tidied %>% filter(value %in% c(8.0, 8.1)) 
+party_cc_9 <- party_cc_tidied %>% filter(value %in% c(9.0, 9.1))
+party_cc_10 <- party_cc_tidied %>% filter(value %in% c(10.0, 10.1))
+party_cc_11 <- party_cc_tidied %>% filter(value %in% c(11.0, 11.1))
+
+party_cc_9new <- party_cc_9 %>% anti_join(party_cc_8, by = "name")
+party_cc_10new <- party_cc_10 %>% anti_join(party_cc_9, by = "name")
+party_cc_11new <- party_cc_11 %>% anti_join(party_cc_10, by = "name")
+  
 ```
 
