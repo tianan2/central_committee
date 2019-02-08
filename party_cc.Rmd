@@ -25,12 +25,17 @@ theme_set(theme_light())
 party_cc_tidied <- party_cc %>% 
   gather(job, value, starts_with("job")) 
 
-party_cc_tidied %>% filter(value %in% c(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)) %>% 
+party_cc_tidied %>% filter(value %in% c(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)) %>% 
   count(value) %>% 
   ggplot(aes(value, n)) +
   geom_point() +
   geom_line() + 
-  expand_limits(y = 0) 
+  expand_limits(y = 0) +
+  scale_x_continuous(breaks = seq(8, 18, 1), 
+                     labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) + 
+  labs(title = "Number of CC full members", 
+       x = "Party congress", 
+       y = "")
 
 
 ## subsetting by national congress
