@@ -18,6 +18,8 @@ party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC.xls") %>% select(-id) %>% re
 ```
 
 ```{r}
-
+party_cc %>% 
+  gather(job, value, starts_with("job")) %>% 
+  View()
 ```
 
