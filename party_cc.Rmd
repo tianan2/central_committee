@@ -114,6 +114,16 @@ all_18new <- party_cc_tidied %>% semi_join(party_cc_18new) %>%
 ## binding all congresses and creating a dataset
 all_newcomers <- bind_rows(all_9new, all_10new, all_11new, all_12new, all_13new, all_14new, all_15new, all_16new, all_17new, all_18new)
 
+all_newcomers %>% group_by(congress) %>% 
+  summarize(jobs = mean(job)) %>% 
+  ggplot(aes(congress, jobs)) +
+  geom_line() +
+  geom_point() +
+  expand_limits(y = 4)
+  
+all_newcomers %>% group_by(congress) %>%
+  ggplot(aes(congress, job)) +
+  geom_boxplot(aes(group = congress))
 
 
 ```
