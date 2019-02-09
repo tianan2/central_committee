@@ -40,8 +40,11 @@ party_cc_tidied %>% filter(value %in% c(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 ## what about alternate members?
 alternate <- party_cc_tidied %>% filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1, 16.1, 17.1, 18.1)) %>% count(value)
 
+```
 
+```{r}
 ## subsetting by national congress
+party_cc_7 <- party_cc_tidied %>% filter(value %in% c(7.0, 7.1))
 party_cc_8 <- party_cc_tidied %>% filter(value %in% c(8.0, 8.1)) 
 party_cc_9 <- party_cc_tidied %>% filter(value %in% c(9.0, 9.1))
 party_cc_10 <- party_cc_tidied %>% filter(value %in% c(10.0, 10.1))
@@ -54,6 +57,7 @@ party_cc_16 <- party_cc_tidied %>% filter(value %in% c(16.0, 16.1))
 party_cc_17 <- party_cc_tidied %>% filter(value %in% c(17.0, 17.1))
 party_cc_18 <- party_cc_tidied %>% filter(value %in% c(18.0, 18.1))
 
+party_cc_8new <- party_cc_8 %>% anti_join(party_cc_7, by = "name")
 party_cc_9new <- party_cc_9 %>% anti_join(party_cc_8, by = "name")
 party_cc_10new <- party_cc_10 %>% anti_join(party_cc_9, by = "name")
 party_cc_11new <- party_cc_11 %>% anti_join(party_cc_10, by = "name")
@@ -65,66 +69,184 @@ party_cc_16new <- party_cc_16 %>% anti_join(party_cc_15, by = "name")
 party_cc_17new <- party_cc_17 %>% anti_join(party_cc_16, by = "name")
 party_cc_18new <- party_cc_18 %>% anti_join(party_cc_17, by = "name")
 
+party_cc_9leave <- party_cc_8 %>% anti_join(party_cc_9, by = "name") 
+party_cc_10leave <- party_cc_9 %>% anti_join(party_cc_10, by = "name") 
+party_cc_11leave <- party_cc_10 %>% anti_join(party_cc_11, by = "name")
+party_cc_12leave <- party_cc_11 %>% anti_join(party_cc_12, by = "name")
+party_cc_13leave <- party_cc_12 %>% anti_join(party_cc_13, by = "name")
+party_cc_14leave <- party_cc_13 %>% anti_join(party_cc_14, by = "name")
+party_cc_15leave <- party_cc_14 %>% anti_join(party_cc_15, by = "name")
+party_cc_16leave <- party_cc_15 %>% anti_join(party_cc_16, by = "name")
+party_cc_17leave <- party_cc_16 %>% anti_join(party_cc_17, by = "name")
+party_cc_18leave <- party_cc_17 %>% anti_join(party_cc_18, by = "name")
+
 ```
 
 ## On average, how many steps a cadre should go through before one becomes a member of CC?
 ```{r}
+all_8new <- party_cc_tidied %>% semi_join(party_cc_8new) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(congress = ifelse(value == 8, value, 8)) %>% 
+  mutate(congress_age = 1956 - birth)
+
 all_9new <- party_cc_tidied %>% semi_join(party_cc_9new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 9, value, 9))
+  mutate(congress = ifelse(value == 9, value, 9)) %>% 
+  mutate(congress_age = 1969 - birth)
 
 all_10new <- party_cc_tidied %>% semi_join(party_cc_10new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 10, value, 10))
+  mutate(congress = ifelse(value == 10, value, 10)) %>% 
+  mutate(congress_age = 1973 - birth)
 
 all_11new <- party_cc_tidied %>% semi_join(party_cc_11new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 11, value, 11))
-
-
+  mutate(congress = ifelse(value == 11, value, 11)) %>% 
+  mutate(congress_age = 1977 - birth)
 
 all_12new <- party_cc_tidied %>% semi_join(party_cc_12new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 12, value, 12))
+  mutate(congress = ifelse(value == 12, value, 12)) %>% 
+  mutate(congress_age = 1982 - birth)
 
 all_13new <- party_cc_tidied %>% semi_join(party_cc_13new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 13, value, 13))
+  mutate(congress = ifelse(value == 13, value, 13)) %>% 
+  mutate(congress_age = 1987 - birth)
 
 all_14new <- party_cc_tidied %>% semi_join(party_cc_14new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 14, value, 14))
+  mutate(congress = ifelse(value == 14, value, 14)) %>% 
+  mutate(congress_age = 1992 - birth)
 
 all_15new <- party_cc_tidied %>% semi_join(party_cc_15new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 15, value, 15))
+  mutate(congress = ifelse(value == 15, value, 15)) %>% 
+  mutate(congress_age = 1997 - birth)
 
 all_16new <- party_cc_tidied %>% semi_join(party_cc_16new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 16, value, 16))
+  mutate(congress = ifelse(value == 16, value, 16)) %>% 
+  mutate(congress_age = 2002 - birth)
 
 all_17new <- party_cc_tidied %>% semi_join(party_cc_17new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 17, value, 17))
+  mutate(congress = ifelse(value == 17, value, 17)) %>% 
+  mutate(congress_age = 2007 - birth)
 
 all_18new <- party_cc_tidied %>% semi_join(party_cc_18new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
-  mutate(congress = ifelse(value == 18, value, 18))
+  mutate(congress = ifelse(value == 18, value, 18)) %>% 
+  mutate(congress_age = 2012 - birth)
 
 ## binding all congresses and creating a dataset
-all_newcomers <- bind_rows(all_9new, all_10new, all_11new, all_12new, all_13new, all_14new, all_15new, all_16new, all_17new, all_18new)
+all_newcomers <- bind_rows(all_8new, all_9new, all_10new, all_11new, all_12new, all_13new, all_14new, all_15new, all_16new, all_17new, all_18new)
 
 all_newcomers %>% group_by(congress) %>% 
-  summarize(jobs = mean(job)) %>% 
-  ggplot(aes(congress, jobs)) +
+  summarize(median_jobs = median(job)) %>% 
+  ggplot(aes(congress, median_jobs)) +
   geom_line() +
   geom_point() +
-  expand_limits(y = 4)
+  expand_limits(y = 4) +
+  scale_x_continuous(breaks = seq(8, 18, 1), 
+                     labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)"))
   
 all_newcomers %>% group_by(congress) %>%
   ggplot(aes(congress, job)) +
-  geom_boxplot(aes(group = congress))
+  geom_boxplot(aes(group = congress)) + 
+  scale_x_continuous(breaks = seq(8, 18, 1), 
+                     labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
+  labs(title = "Figure. Number of promotion steps of the CC newcomers", 
+       x = "", 
+       y = "Number of promotion steps")
 
+all_newcomers %>% group_by(congress) %>% 
+  summarize(median_age = median(congress_age)) %>% 
+  ggplot(aes(congress, median_age)) +
+  geom_line() +
+  geom_point() +
+  expand_limits(y = 40) +
+  scale_x_continuous(breaks = seq(8, 18, 1), 
+                     labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)"))
+
+all_newcomers %>% group_by(congress) %>% 
+  ggplot(aes(congress, congress_age)) +
+  geom_boxplot(aes(group = congress)) + 
+  scale_x_continuous(breaks = seq(8, 18, 1), 
+                     labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
+  labs(title = "Figure 3. Age of new comers to the CCP Central Committee", 
+       x = "", 
+       y = "Age")
+
+```
+## Age of Retirees 
+```{r}
+all_9retiree <- party_cc_tidied %>% semi_join(party_cc_9leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 8, 9, 9)) %>% 
+  mutate(retire_age = 1969 - birth)
+
+all_10retiree <- party_cc_tidied %>% semi_join(party_cc_10leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 9, 10, 10)) %>% 
+  mutate(retire_age = 1973 - birth)
+
+all_11retiree <- party_cc_tidied %>% semi_join(party_cc_11leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 10, 11, 11)) %>% 
+  mutate(retire_age = 1977 - birth)
+
+all_12retiree <- party_cc_tidied %>% semi_join(party_cc_12leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 11, 12, 12)) %>% 
+  mutate(retire_age = 1982 - birth)
+
+all_13retiree <- party_cc_tidied %>% semi_join(party_cc_13leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 12, 13, 13)) %>% 
+  mutate(retire_age = 1987 - birth)
+
+all_14retiree <- party_cc_tidied %>% semi_join(party_cc_14leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 13, 14, 14)) %>% 
+  mutate(retire_age = 1992 - birth)
+
+all_15retiree <- party_cc_tidied %>% semi_join(party_cc_15leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 14, 15, 15)) %>% 
+  mutate(retire_age = 1997 - birth)
+
+all_16retiree <- party_cc_tidied %>% semi_join(party_cc_16leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 15, 16, 16)) %>% 
+  mutate(retire_age = 2002 - birth)
+
+all_15retiree %>% arrange(desc(retire_age))
+
+all_17retiree <- party_cc_tidied %>% semi_join(party_cc_17leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 16, 17, 17)) %>% 
+  mutate(retire_age = 2007 - birth)
+
+all_18retiree <- party_cc_tidied %>% semi_join(party_cc_18leave) %>% 
+  mutate(job = as.numeric(str_remove(job, "job"))) %>% 
+  mutate(retire_cong = ifelse(value == 17, 18, 18)) %>% 
+  mutate(retire_age = 2012 - birth)
+
+## binding all congresses and creating a dataset
+all_retirees <- bind_rows(all_9retiree, all_10retiree, all_11retiree, all_12retiree, all_13retiree, all_14retiree, all_15retiree, all_16retiree, all_17retiree, all_18retiree)
+
+all_retirees %>% group_by(retire_cong) %>% 
+  ggplot(aes(retire_cong, retire_age)) +
+  geom_boxplot(aes(group = retire_cong)) + 
+  scale_x_continuous(breaks = seq(9, 18, 1), 
+                     labels = c("9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
+  scale_y_continuous(breaks = seq(30, 100, 10), 
+                     labels = seq(30, 100, 10)) +
+  labs(title = "Figure 3. Age of retirees to the CCP Central Committee", 
+       x = "", 
+       y = "Age", 
+       caption = "Source: Orginal dataset built on Shih et al 2012")
 
 ```
 
