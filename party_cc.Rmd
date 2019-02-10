@@ -249,4 +249,13 @@ all_retirees %>% group_by(retire_cong) %>%
        caption = "Source: Orginal dataset built on Shih et al 2012")
 
 ```
+```{r}
+alternate_member <- party_cc_tidied %>% filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1, 16.1, 17.1, 18.1)) 
+
+alternate_member %>% left_join(party_cc_tidied, by = "name") %>% 
+  mutate(full_cc = ifelse(value.y %in% c(9, 10, 11, 12, 13, 14, 15, 16, 17, 18), 1, 0)) %>% 
+  View()
+
+
+```
 
