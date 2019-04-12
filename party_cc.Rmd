@@ -176,11 +176,17 @@ all_newcomers %>% group_by(congress) %>%
   geom_boxplot(aes(group = congress)) + 
   scale_x_continuous(breaks = seq(8, 18, 1), 
                      labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
+<<<<<<< HEAD
   labs(title = "Figure 1. Distribution of entry age at CC in post-1949 party congresses", 
+=======
+  labs(title = "Figure 3. Distribution of entry age at CC in post-1949 party congresses", 
+>>>>>>> f24ebb7dd95e385f2f57226c568388d0f698e1bc
        x = "", 
        y = "Age", 
        caption = "Source: Original dataset built on Shih et al 2012") + 
   coord_flip()
+
+all_newcomers_sel <- all_newcomers %>% select(name, congress, congress_age) %>% rename("entry_cong" = congress, "entry_age" = congress_age)
 
 all_newcomers_sel <- all_newcomers %>% select(name, congress, congress_age) %>% rename("entry_cong" = congress, "entry_age" = congress_age)
 
@@ -242,6 +248,13 @@ all_18retiree <- party_cc_tidied %>% semi_join(party_cc_18leave) %>%
 ## binding all congresses and creating a dataset
 all_retirees <- bind_rows(all_9retiree, all_10retiree, all_11retiree, all_12retiree, all_13retiree, all_14retiree, all_15retiree, all_16retiree, all_17retiree, all_18retiree)
 
+<<<<<<< HEAD
+=======
+all_retirees %>% select(name, retire_cong, retire_age) %>% 
+  filter(retire_cong == 15, retire_age > 70)
+
+
+>>>>>>> f24ebb7dd95e385f2f57226c568388d0f698e1bc
 ## Plotting
 all_retirees %>%  
   ggplot(aes(retire_cong, retire_age)) +
@@ -250,11 +263,18 @@ all_retirees %>%
                      labels = c("9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
   scale_y_continuous(breaks = seq(30, 100, 10), 
                      labels = seq(30, 100, 10)) +
+<<<<<<< HEAD
   labs(title = "Figure 2. Distribution of retirement age at CC in post-1949 party congresses", 
        x = "", 
        y = "Age", 
        caption = "Source: Original dataset built on Shih et al 2012") + 
   coord_flip()
+=======
+  labs(title = "Figure 4. Distribution of retirement age at CC in post-1949 party congresses", 
+       x = "", 
+       y = "Age", 
+       caption = "Source: Original dataset built on Shih et al 2012")
+>>>>>>> f24ebb7dd95e385f2f57226c568388d0f698e1bc
 
 all_retirees_sel <- all_retirees %>% select(name, retire_cong, retire_age) 
 
