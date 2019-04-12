@@ -44,18 +44,18 @@ alternate <- party_cc_tidied %>% filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1,
 
 ```{r}
 ## subsetting by national congress
-party_cc_7 <- party_cc_tidied %>% filter(value %in% c(7.0, 7.1))
-party_cc_8 <- party_cc_tidied %>% filter(value %in% c(8.0, 8.1)) 
-party_cc_9 <- party_cc_tidied %>% filter(value %in% c(9.0, 9.1))
-party_cc_10 <- party_cc_tidied %>% filter(value %in% c(10.0, 10.1))
-party_cc_11 <- party_cc_tidied %>% filter(value %in% c(11.0, 11.1))
-party_cc_12 <- party_cc_tidied %>% filter(value %in% c(12.0, 12.1))
-party_cc_13 <- party_cc_tidied %>% filter(value %in% c(13.0, 13.1))
-party_cc_14 <- party_cc_tidied %>% filter(value %in% c(14.0, 14.1))
-party_cc_15 <- party_cc_tidied %>% filter(value %in% c(15.0, 15.1))
-party_cc_16 <- party_cc_tidied %>% filter(value %in% c(16.0, 16.1))
-party_cc_17 <- party_cc_tidied %>% filter(value %in% c(17.0, 17.1))
-party_cc_18 <- party_cc_tidied %>% filter(value %in% c(18.0, 18.1))
+party_cc_7 <- party_cc_tidied %>% filter(value == 7.0)
+party_cc_8 <- party_cc_tidied %>% filter(value == 8.0) 
+party_cc_9 <- party_cc_tidied %>% filter(value == 9.0)
+party_cc_10 <- party_cc_tidied %>% filter(value == 10.0)
+party_cc_11 <- party_cc_tidied %>% filter(value == 11.0)
+party_cc_12 <- party_cc_tidied %>% filter(value == 12.0)
+party_cc_13 <- party_cc_tidied %>% filter(value == 13.0)
+party_cc_14 <- party_cc_tidied %>% filter(value == 14.0)
+party_cc_15 <- party_cc_tidied %>% filter(value == 15.0)
+party_cc_16 <- party_cc_tidied %>% filter(value == 16.0)
+party_cc_17 <- party_cc_tidied %>% filter(value == 17.0)
+party_cc_18 <- party_cc_tidied %>% filter(value == 18.0)
 
 party_cc_8new <- party_cc_8 %>% anti_join(party_cc_7, by = "name")
 party_cc_9new <- party_cc_9 %>% anti_join(party_cc_8, by = "name")
@@ -142,23 +142,25 @@ all_18new <- party_cc_tidied %>% semi_join(party_cc_18new) %>%
 ## binding all congresses and creating a dataset
 all_newcomers <- bind_rows(all_8new, all_9new, all_10new, all_11new, all_12new, all_13new, all_14new, all_15new, all_16new, all_17new, all_18new)
 
+## Plotting a lineplot on the average of promotions before entering the CC
 all_newcomers %>% group_by(congress) %>% 
-  summarize(median_jobs = median(job)) %>% 
-  ggplot(aes(congress, median_jobs)) +
+  summarize(mean_jobs = mean(job)) %>% 
+  ggplot(aes(congress, mean_jobs)) +
   geom_line() +
   geom_point() +
   expand_limits(y = 4) +
   scale_x_continuous(breaks = seq(8, 18, 1), 
                      labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)"))
-  
+
+## Plotting a boxplot on the average of promotions 
 all_newcomers %>% group_by(congress) %>%
   ggplot(aes(congress, job)) +
   geom_boxplot(aes(group = congress)) + 
   scale_x_continuous(breaks = seq(8, 18, 1), 
                      labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
-  labs(title = "Figure 4. The road to CC", 
+  labs(title = "Figure 4. Career-path of the newcomers to the CC", 
        x = "", 
-       y = "Number of jobs before CC")
+       y = "Number of jobs")
 
 all_newcomers %>% group_by(congress) %>% 
   summarize(median_age = median(congress_age)) %>% 
@@ -174,9 +176,13 @@ all_newcomers %>% group_by(congress) %>%
   geom_boxplot(aes(group = congress)) + 
   scale_x_continuous(breaks = seq(8, 18, 1), 
                      labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
-  labs(title = "Figure 2. Distribution of entry age at CC in post-1949 party congresses", 
+  labs(title = "Figure 1. Distribution of entry age at CC in post-1949 party congresses", 
        x = "", 
-       y = "Age")
+       y = "Age", 
+       caption = "Source: Original dataset built on Shih et al 2012") + 
+  coord_flip()
+
+all_newcomers_sel <- all_newcomers %>% select(name, congress, congress_age) %>% rename("entry_cong" = congress, "entry_age" = congress_age)
 
 ```
 ## Age of Retirees 
@@ -236,17 +242,27 @@ all_18retiree <- party_cc_tidied %>% semi_join(party_cc_18leave) %>%
 ## binding all congresses and creating a dataset
 all_retirees <- bind_rows(all_9retiree, all_10retiree, all_11retiree, all_12retiree, all_13retiree, all_14retiree, all_15retiree, all_16retiree, all_17retiree, all_18retiree)
 
-all_retirees %>% group_by(retire_cong) %>% 
+## Plotting
+all_retirees %>%  
   ggplot(aes(retire_cong, retire_age)) +
   geom_boxplot(aes(group = retire_cong)) + 
   scale_x_continuous(breaks = seq(9, 18, 1), 
                      labels = c("9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) +
   scale_y_continuous(breaks = seq(30, 100, 10), 
                      labels = seq(30, 100, 10)) +
-  labs(title = "Figure 3. Distribution of retirement age at CC in post-1949 party congresses", 
+  labs(title = "Figure 2. Distribution of retirement age at CC in post-1949 party congresses", 
        x = "", 
        y = "Age", 
-       caption = "Source: Orginal dataset built on Shih et al 2012")
+       caption = "Source: Original dataset built on Shih et al 2012") + 
+  coord_flip()
+
+all_retirees_sel <- all_retirees %>% select(name, retire_cong, retire_age) 
+
+party_cc_tidied %>% 
+  left_join(all_newcomers_sel, by = "name") %>% 
+  left_join(all_retirees_sel, by = "name") %>% 
+  gather(cong, age, entry_cong:retire_age) 
+
 
 ```
 
