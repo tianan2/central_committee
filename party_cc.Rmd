@@ -4,7 +4,7 @@ author: "Jaehwan Lim"
 date: "February 6, 2019"
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -13,11 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(scales)
 library(readxl)
-
-party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC.xls") %>% select(-id) %>% rename(purgede = pursede, march = lmarch)
-
 theme_set(theme_light())
+
+party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC.xlsx") %>% 
+  select(-id) %>% rename(purgede = pursede, march = lmarch)
 ```
 
 ```{r}
@@ -25,21 +26,23 @@ theme_set(theme_light())
 party_cc_tidied <- party_cc %>% 
   gather(job, value, starts_with("job")) 
 
-party_cc_tidied %>% filter(value %in% c(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)) %>% 
+party_cc_tidied %>% 
+  filter(value %in% c(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19)) %>% 
   count(value) %>% 
   ggplot(aes(value, n)) +
   geom_line(size = 0.8) + 
   geom_line(data = alternate, aes(value, n), linetype = "dashed") +
   expand_limits(y = 0) +
-  scale_x_continuous(breaks = seq(8, 18, 1), 
-                     labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)")) + 
+  scale_x_continuous(breaks = seq(8, 19, 1), 
+                     labels = c("8(1956)", "9(1969)", "10(1973)", "11(1977)", "12(1982)", "13(1987)", "14(1992)", "15(1997)", "16(2002)", "17(2007)", "18(2012)", "19(2017)")) + 
   labs(title = "Number of CC full and alternate members", 
        x = "Party congress", 
        y = "")
 
 ## what about alternate members?
-alternate <- party_cc_tidied %>% filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1, 16.1, 17.1, 18.1)) %>% count(value)
+alternate <- party_cc_tidied %>% filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1, 16.1, 17.1, 18.1, 19.1)) %>% count(value)
 
+party_cc_tidied %>% filter(name == "习近平")
 ```
 
 ```{r}
