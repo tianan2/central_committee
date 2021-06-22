@@ -1,0 +1,55 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(scales)
+library(readxl)
+theme_set(theme_light())
+
+party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC.xlsx") %>% 
+  rename(purgede = pursede, march = lmarch)
+
+party_cc %>% filter(name1 == "Guo Shuqing")
+```
+
+## EDA
+
+```{r}
+party_cc_tidied <- 
+  party_cc %>% 
+  gather(job, value, starts_with("job")) 
+
+full_member <- party_cc_tidied %>% 
+  filter(value %in% c(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19))
+
+full_member %>% 
+  count(id, name, sort = T)
+  
+alternate_member <- party_cc_tidied %>% 
+  filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1, 16.1, 17.1, 18.1))
+
+alternate_member %>% 
+  count(id, name, sort = T) 
+
+```
+## data preparation
+
+```{r}
+full_member_selected <- full_member %>% select(id, job, value) 
+
+alternate_member %>% 
+  left_join(full_member_selected, by = "id") %>% 
+  mutate(full = ifelse(value.y %in% c(9, 10, 11, 12, 13, 14, 15, 16, 17, 18), 1, 0)) %>% 
+  filter(full == 0) %>% 
+  distinct(id, name)
+
+
+```
+
