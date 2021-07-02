@@ -13,7 +13,7 @@ library(scales)
 library(readxl)
 theme_set(theme_light())
 
-party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC.xlsx") %>% 
+party_cc <- read_excel("CC+Data+Jobcoded+18CC+-+ACC (3).xlsx") %>% 
   rename(purgede = pursede, march = lmarch)
 
 party_cc %>% filter(name1 == "Guo Shuqing")

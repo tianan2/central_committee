@@ -17,7 +17,7 @@ library(scales)
 library(readxl)
 theme_set(theme_light())
 
-party_cc <- read_excel("~/Downloads/CC+Data+Jobcoded+18CC+-+ACC.xlsx") %>% 
+party_cc <- read_excel("~/Downloads/CC+Data+Jobcoded+18CC+-+ACC (5).xlsx") %>% 
   rename(purgede = pursede, march = lmarch)
 ```
 
@@ -42,7 +42,7 @@ party_cc_tidied %>%
 ## what about alternate members?
 alternate <- party_cc_tidied %>% filter(value %in% c(8.1, 9.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1, 16.1, 17.1, 18.1, 19.1)) %>% count(value)
 
-party_cc_tidied %>% filter(name == "习近平")
+party_cc_tidied %>% filter(name1 == "Huang Huahua")
 ```
 
 ```{r}
@@ -86,6 +86,8 @@ party_cc_18leave <- party_cc_17 %>% anti_join(party_cc_18, by = "name")
 ```
 
 ## On average, how many steps a cadre should go through before one becomes a member of CC?
+
+
 ```{r}
 all_8new <- party_cc_tidied %>% semi_join(party_cc_8new) %>% 
   mutate(job = as.numeric(str_remove(job, "job"))) %>% 
