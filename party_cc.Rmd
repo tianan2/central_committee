@@ -17,8 +17,17 @@ library(scales)
 library(readxl)
 theme_set(theme_light())
 
-party_cc <- read_excel("~/Downloads/CC+Data+Jobcoded+18CC+-+ACC (5).xlsx") %>% 
+party_cc <- read_excel("~/Downloads/CC+Data+Jobcoded+18CC+-+ACC (6).xlsx") %>% 
   rename(purgede = pursede, march = lmarch)
+
+party_cc_19 <- read_excel("~/Downloads/CC+Data+Jobcoded+18CC+-+ACC (6).xlsx", sheet = 4) %>% 
+  rename(purgede = pursede, march = lmarch)
+
+party_cc_19_gathered <- party_cc_19 %>% gather(job, value, starts_with("job")) 
+
+party_cc_19_filtered <- party_cc_19_gathered %>% filter(value %in% c(19, 19.1))
+
+party_cc_19 %>% anti_join(party_cc_19_filtered, by = "name")
 ```
 
 ```{r}
